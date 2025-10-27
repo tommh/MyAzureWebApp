@@ -18,9 +18,10 @@ public class ApplicationDbContext : DbContext
         
         modelBuilder.Entity<Client>(entity =>
         {
-            entity.ToTable("Client");
             entity.HasKey(e => e.ClientID);
-            entity.Property(e => e.ClientName).HasMaxLength(255);
+            entity.Property(e => e.ClientName)
+                .IsRequired()
+                .HasMaxLength(100);
         });
     }
 }

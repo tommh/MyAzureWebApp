@@ -6,13 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-// Configure database connection with environment variables
+// Configure database connection
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (!string.IsNullOrEmpty(connectionString))
+
+// For Azure deployment, replace placeholders with environment variables
+if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("{DB_USERNAME}"))
 {
-    // Replace placeholders with environment variables
-    var dbUsername = Environment.GetEnvironmentVariable("DB_USERNAME") ?? "your_username";
-    var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "your_password";
+    var dbUsername = Environment.GetEnvironmentVariable("DB_USERNAME") ?? 
+                    Environment.GetEnvironmentVariable("AZURE_SQL_USERNAME") ?? 
+                    "your_username";
+    var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? 
+                    Environment.GetEnvironmentVariable("AZURE_SQL_PASSWORD") ?? 
+                    "your_password";
     
     connectionString = connectionString
         .Replace("{DB_USERNAME}", dbUsername)
@@ -20,8 +25,11 @@ if (!string.IsNullOrEmpty(connectionString))
 }
 
 // Add Entity Framework
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+if (!string.IsNullOrEmpty(connectionString))
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(connectionString));
+}
 
 var app = builder.Build();
 
