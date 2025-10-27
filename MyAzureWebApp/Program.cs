@@ -16,7 +16,7 @@ if (string.IsNullOrEmpty(connectionString) || connectionString.Contains("{DB_USE
     connectionString = Environment.GetEnvironmentVariable("DefaultConnection") ?? connectionString;
     
     // If still has placeholders, replace with individual environment variables
-    if (connectionString.Contains("{DB_USERNAME}"))
+    if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("{DB_USERNAME}"))
     {
         var dbUsername = Environment.GetEnvironmentVariable("DB_USERNAME") ?? 
                         Environment.GetEnvironmentVariable("AZURE_SQL_USERNAME") ?? 
@@ -31,11 +31,23 @@ if (string.IsNullOrEmpty(connectionString) || connectionString.Contains("{DB_USE
     }
 }
 
-// Add Entity Framework
+// Add Entity Framework with error handling
 if (!string.IsNullOrEmpty(connectionString))
 {
-    builder.Services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
+    try
+    {
+        builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(connectionString));
+    }
+    catch (Exception ex)
+    {
+        // Log the error but don't crash the app
+        Console.WriteLine($"Error configuring database: {ex.Message}");
+    }
+}
+else
+{
+    Console.WriteLine("Warning: No database connection string found. Database features will not be available.");
 }
 
 var app = builder.Build();
