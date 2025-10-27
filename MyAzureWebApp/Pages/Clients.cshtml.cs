@@ -30,9 +30,9 @@ public class ClientsModel : PageModel
 
         try
         {
-            // Execute the SQL query: SELECT TOP (1000) [ClientID], [ClientName] FROM [dbo].[Client]
+            // Execute the specific SQL query: SELECT [ClientID], [ClientName] FROM [Tomm_SQL_Server].dbo.[Client]
             Clients = await _context.Clients
-                .Take(1000)
+                .FromSqlRaw("SELECT [ClientID], [ClientName] FROM [Tomm_SQL_Server].dbo.[Client]")
                 .ToListAsync();
         }
         catch (Exception ex)
