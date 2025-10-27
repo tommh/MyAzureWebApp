@@ -5,7 +5,7 @@
 - GitHub Actions workflow: `azure-deploy.yml`
 - Azure Web App: `Rotations`
 - Database: Azure SQL Server (tomm.database.windows.net)
-- Authentication: Publish Profile
+- Authentication: Publish Profile (Repository Secret)
 
 ## 📋 Features
 - Client management system
