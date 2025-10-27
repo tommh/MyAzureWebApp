@@ -30,7 +30,7 @@ jobs:
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
-        app-name: 'din-app-navn'  # Endre til ditt app navn
+        app-name: 'Rotations'  # Din eksisterende Azure Web App
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
         package: './publish'
 

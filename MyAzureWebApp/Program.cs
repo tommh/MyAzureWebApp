@@ -72,6 +72,24 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+// Add database test endpoint
+app.MapGet("/test-db", async (ApplicationDbContext context) =>
+{
+    try
+    {
+        var canConnect = await context.Database.CanConnectAsync();
+        return Results.Ok(new { 
+            success = canConnect, 
+            message = canConnect ? "Database connection successful!" : "Database connection failed!",
+            timestamp = DateTime.UtcNow
+        });
+    }
+    catch (Exception ex)
+    {
+        return Results.Problem($"Database connection error: {ex.Message}");
+    }
+});
+
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
