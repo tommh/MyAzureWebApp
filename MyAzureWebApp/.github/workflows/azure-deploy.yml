@@ -27,14 +27,19 @@ jobs:
     - name: 'Publish the project'
       run: dotnet publish --configuration Release --no-build --output ./publish
       
+    - name: 'Create deployment ZIP'
+      run: cd publish && zip -r ../deployment.zip . && cd ..
+      
     - name: 'Login to Azure'
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-    - name: 'Deploy to Azure Web App'
-      uses: azure/webapps-deploy@v3
-      with:
-        app-name: 'Rotations'
-        package: './publish'
+    - name: 'Deploy to Azure Web App using Azure CLI'
+      run: |
+        az webapp deploy \
+          --name Rotations \
+          --resource-group Inet_Partner_Resource_Group \
+          --src-path ./deployment.zip \
+          --type zip
 
