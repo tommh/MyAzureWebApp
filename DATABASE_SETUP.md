@@ -53,23 +53,15 @@ $env:DB_PASSWORD="ditt_passord"
 dotnet ef database update --connection "Server=tcp:tomm.database.windows.net,1433;Initial Catalog=VolleyballRotations;Persist Security Info=False;User ID=tomm_admin;Password=ditt_passord;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 ```
 
-### 4. Konfigurer Azure Web App
+### 4. Azure Web App Configuration ✅
+**Connection String allerede satt opp i Azure!**
+
+Din Azure Web App har allerede en `DefaultConnection` environment variable med komplett connection string. Koden vil automatisk bruke denne når den kjører på Azure.
+
+**Sjekk at den er satt:**
 1. Gå til din Web App i Azure Portal
 2. Klikk "Configuration" i venstre meny
-3. Under "Application settings", legg til:
-   - **Name**: `DB_USERNAME`
-   - **Value**: `tomm_admin`
-   - **Name**: `DB_PASSWORD`
-   - **Value**: `ditt_passord`
-
-### 5. Oppdater connection string i appsettings.json
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=tcp:tomm.database.windows.net,1433;Initial Catalog=VolleyballRotations;Persist Security Info=False;User ID={DB_USERNAME};Password={DB_PASSWORD};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-  }
-}
-```
+3. Under "Connection strings", sjekk at `DefaultConnection` eksisterer
 
 ---
 

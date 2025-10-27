@@ -9,19 +9,26 @@ builder.Services.AddRazorPages();
 // Configure database connection
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// For Azure deployment, replace placeholders with environment variables
-if (!string.IsNullOrEmpty(connectionString) && connectionString.Contains("{DB_USERNAME}"))
+// For Azure deployment, check if we have a complete connection string from environment
+if (string.IsNullOrEmpty(connectionString) || connectionString.Contains("{DB_USERNAME}"))
 {
-    var dbUsername = Environment.GetEnvironmentVariable("DB_USERNAME") ?? 
-                    Environment.GetEnvironmentVariable("AZURE_SQL_USERNAME") ?? 
-                    "your_username";
-    var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? 
-                    Environment.GetEnvironmentVariable("AZURE_SQL_PASSWORD") ?? 
-                    "your_password";
+    // Try to get the complete connection string from Azure environment variable
+    connectionString = Environment.GetEnvironmentVariable("DefaultConnection") ?? connectionString;
     
-    connectionString = connectionString
-        .Replace("{DB_USERNAME}", dbUsername)
-        .Replace("{DB_PASSWORD}", dbPassword);
+    // If still has placeholders, replace with individual environment variables
+    if (connectionString.Contains("{DB_USERNAME}"))
+    {
+        var dbUsername = Environment.GetEnvironmentVariable("DB_USERNAME") ?? 
+                        Environment.GetEnvironmentVariable("AZURE_SQL_USERNAME") ?? 
+                        "your_username";
+        var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? 
+                        Environment.GetEnvironmentVariable("AZURE_SQL_PASSWORD") ?? 
+                        "your_password";
+        
+        connectionString = connectionString
+            .Replace("{DB_USERNAME}", dbUsername)
+            .Replace("{DB_PASSWORD}", dbPassword);
+    }
 }
 
 // Add Entity Framework
