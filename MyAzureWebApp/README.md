@@ -1,7 +1,7 @@
 # MyAzureWebApp
 
 ## 🚀 Azure Deployment Status
-✅ **Deployment er konfigurert og klar!**
+✅ **Deployment er konfigurert og klar!** (Build feil fikset)
 - GitHub Actions workflow: `main_rotations.yml`
 - Azure Web App: `Rotations`
 - Database: Azure SQL Server (tomm.database.windows.net)
