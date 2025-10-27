@@ -1,0 +1,142 @@
+@page
+@model MyAzureWebApp.Pages.MatchRolleModel
+@{
+    ViewData["Title"] = "Match Rolle Beregning";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="mb-0">Match Rolle Beregning</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="ViStarterServe" class="form-label">Hvem starter med serve?</label>
+                                <select asp-for="Input.ViStarterServe" class="form-select" id="ViStarterServe">
+                                    <option value="">Velg...</option>
+                                    @foreach (var item in Model.ViStarterMedServeList)
+                                    {
+                                        <option value="@item.Verdi">@item.Beskrivelse</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Input.ViStarterServe" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="VaarSpillerRolle" class="form-label">Vår spiller rolle</label>
+                                <select asp-for="Input.VaarSpillerRolle" class="form-select" id="VaarSpillerRolle">
+                                    <option value="">Velg...</option>
+                                    @foreach (var item in Model.VaarSpillerRolleList)
+                                    {
+                                        <option value="@item.VaarRolle">@item.VaarRolle</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Input.VaarSpillerRolle" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="DeresSpillerRolle" class="form-label">Deres spiller rolle</label>
+                                <select asp-for="Input.DeresSpillerRolle" class="form-select" id="DeresSpillerRolle">
+                                    <option value="">Velg...</option>
+                                    @foreach (var item in Model.DeresSpillerRolleList)
+                                    {
+                                        <option value="@item.DeresRolle">@item.DeresRolle</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Input.DeresSpillerRolle" class="text-danger"></span>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="DeresStartRotasjon" class="form-label">Deres start rotasjon</label>
+                                <select asp-for="Input.DeresStartRotasjon" class="form-select" id="DeresStartRotasjon">
+                                    <option value="">Velg...</option>
+                                    @foreach (var item in Model.DeresStartRotasjonList)
+                                    {
+                                        <option value="@item.Verdi">@item.Beskrivelse</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Input.DeresStartRotasjon" class="text-danger"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-calculator"></i> Beregn Optimal Rotasjon
+                            </button>
+                        </div>
+                    </form>
+                    
+                    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+                    {
+                        <div class="alert alert-danger mt-3" role="alert">
+                            <i class="fas fa-exclamation-triangle"></i> @Model.ErrorMessage
+                        </div>
+                    }
+                    
+                    @if (Model.Result != null)
+                    {
+                        <div class="mt-4">
+                            <h4 class="text-success">
+                                <i class="fas fa-trophy"></i> Beregningsresultat
+                            </h4>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Parameter</th>
+                                            <th>Verdi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Vår spiller rolle</strong></td>
+                                            <td>@Model.Result.VaarSpillerRolle</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Deres spiller rolle</strong></td>
+                                            <td>@Model.Result.DeresSpillerRolle</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Optimal vår start rotasjon</strong></td>
+                                            <td><span class="badge bg-primary fs-6">@Model.Result.OptimalVaarStartRotasjon</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Deres start rotasjon</strong></td>
+                                            <td>@Model.Result.DeresStartRotasjon</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Hvem starter serve</strong></td>
+                                            <td>@Model.Result.HvemStarterServe</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Antall matchups</strong></td>
+                                            <td><span class="badge bg-success fs-6">@Model.Result.AntallMatchups</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Vårt antall med legger fremme</strong></td>
+                                            <td><span class="badge bg-info fs-6">@Model.Result.VaartAntallMedLeggerFremme</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Deres antall med legger fremme</strong></td>
+                                            <td><span class="badge bg-warning fs-6">@Model.Result.DeresAntallMedLeggerFremme</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
