@@ -1,11 +1,37 @@
 html {
   font-size: 14px;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @media (min-width: 768px) {
   html {
     font-size: 16px;
   }
+}
+
+/* iPhone-optimalisering */
+@media (max-width: 767px) {
+  .display-4 {
+    font-size: 2.5rem;
+  }
+  
+  .lead {
+    font-size: 1.1rem;
+  }
+  
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+/* Forbedret touch-targets for mobil */
+.btn, .nav-link {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -19,6 +45,19 @@ html {
 
 body {
   margin-bottom: 60px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Bedre spacing for mobil */
+@media (max-width: 767px) {
+  body {
+    padding-top: 10px;
+  }
+  
+  .mb-3 {
+    margin-bottom: 1rem !important;
+  }
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
