@@ -38,6 +38,12 @@ if (!string.IsNullOrEmpty(connectionString))
     {
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString));
+        
+        // Test connection in development
+        if (builder.Environment.IsDevelopment())
+        {
+            Console.WriteLine($"Connection String: {connectionString.Substring(0, Math.Min(50, connectionString.Length))}...");
+        }
     }
     catch (Exception ex)
     {
