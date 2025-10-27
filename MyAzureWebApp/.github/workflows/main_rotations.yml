@@ -49,14 +49,17 @@ jobs:
           name: .net-app
       
       - name: Login to Azure
-        uses: azure/login@v1
+        uses: azure/login@v2
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_B3C8D77114FE4183B1DBE3FC479A1816 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9EDAC71C9B044BC1AF15D334BAAD86BA }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_13F2FC334FE843A49B5812F2AF34287D }}
       
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
+        uses: azure/webapps-deploy@v3
         with:
           app-name: 'Rotations'
+          slot-name: 'Production'
           package: .
           
