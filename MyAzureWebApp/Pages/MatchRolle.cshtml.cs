@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using MyAzureWebApp.Data;
 using MyAzureWebApp.Models;
+using System.Linq;
 
 namespace MyAzureWebApp.Pages;
 
@@ -46,18 +47,19 @@ public class MatchRolleModel : PageModel
             await LoadDropdownDataAsync();
             
             // Execute the stored procedure
-            var result = await _context.Database
+            var results = _context.Database
                 .SqlQueryRaw<OptimalRotasjonResult>(
                     "EXEC [dbo].[FinnOptimalStartRotasjon] @ViStarterServe = {0}, @VaarSpillerRolle = {1}, @DeresSpillerRolle = {2}, @DeresStartRotasjon = {3}",
                     Input.ViStarterServe!.Value,
                     Input.VaarSpillerRolle,
                     Input.DeresSpillerRolle,
                     Input.DeresStartRotasjon!.Value)
-                .FirstOrDefaultAsync();
+                .AsEnumerable()
+                .FirstOrDefault();
 
-            if (result != null)
+            if (results != null)
             {
-                Result = result;
+                Result = results;
             }
             else
             {
@@ -78,24 +80,28 @@ public class MatchRolleModel : PageModel
         try
         {
             // Load ViStarterMedServe data
-            ViStarterMedServeList = await _context.Database
+            ViStarterMedServeList = _context.Database
                 .SqlQueryRaw<ViStarterMedServe>("EXEC [dbo].[ListViStarterMedServe]")
-                .ToListAsync();
+                .AsEnumerable()
+                .ToList();
 
             // Load VaarSpillerRolle data
-            VaarSpillerRolleList = await _context.Database
+            VaarSpillerRolleList = _context.Database
                 .SqlQueryRaw<VaarSpillerRolle>("EXEC [dbo].[ListVaarSpillerRolle]")
-                .ToListAsync();
+                .AsEnumerable()
+                .ToList();
 
             // Load DeresSpillerRolle data
-            DeresSpillerRolleList = await _context.Database
+            DeresSpillerRolleList = _context.Database
                 .SqlQueryRaw<DeresSpillerRolle>("EXEC [dbo].[ListDeresSpillerRolle]")
-                .ToListAsync();
+                .AsEnumerable()
+                .ToList();
 
             // Load DeresStartRotasjon data
-            DeresStartRotasjonList = await _context.Database
+            DeresStartRotasjonList = _context.Database
                 .SqlQueryRaw<DeresStartRotasjon>("EXEC [dbo].[ListDeresStartRotasjon]")
-                .ToListAsync();
+                .AsEnumerable()
+                .ToList();
         }
         catch (Exception ex)
         {

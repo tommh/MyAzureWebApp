@@ -37,7 +37,8 @@ if (!string.IsNullOrEmpty(connectionString))
     try
     {
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString, sqlOptions => 
+                sqlOptions.CommandTimeout(60)));
         
         // Test connection in development
         if (builder.Environment.IsDevelopment())
